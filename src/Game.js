@@ -1,9 +1,17 @@
 export default class Game {
-  constructor(isDemo = true) {
+  constructor(boardTiles, trayTiles, isDemo) {
     this.boardSize = 5;
     this.traySize = 5;
-    this.boardTiles = new Map();
-    this.trayTiles = new Map();
+    if (boardTiles) {
+      this.boardTiles = boardTiles;
+    } else {
+      this.boardTiles = new Map();
+    }
+    if (trayTiles) {
+      this.trayTiles = trayTiles;
+    } else {
+      this.trayTiles = new Map();
+    }
     if (isDemo) {
       this.#setupDemo();
     }

@@ -26,3 +26,7 @@
   text-align: center;
   width: 34px;
 }
+
+.selected {
+  color: blue;
+}
