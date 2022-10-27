@@ -35,9 +35,13 @@ export default function App() {
     dispatch({type: "dropTrayTileOnTray", t: t})
   }
 
+  function handleBoardSquareClick(row, col) {
+    dispatch({type: "dropTrayTileOnBoard", row: row, col: col})
+  }
+
   return (
     <div className="app">
-      <Board size={game.boardSize} tiles={game.boardTiles} />
+      <Board size={game.boardSize} tiles={game.boardTiles} onSquareClick={handleBoardSquareClick} />
       <Tray 
         size={game.traySize}
         tiles={game.trayTiles}
