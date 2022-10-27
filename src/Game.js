@@ -1,34 +1,63 @@
+import { idFromRowCol } from "./Helper";
+
 export default class Game {
-  constructor(boardTiles, trayTiles, isDemo) {
+  constructor(game = null) {
     this.boardSize = 5;
     this.traySize = 5;
-    if (boardTiles) {
-      this.boardTiles = boardTiles;
-    } else {
-      this.boardTiles = new Map();
-    }
-    if (trayTiles) {
-      this.trayTiles = trayTiles;
-    } else {
-      this.trayTiles = new Map();
-    }
-    if (isDemo) {
-      this.#setupDemo();
+    this.boardTiles = new Map();
+    this.trayTiles = new Map();
+    if (game) {
+      game.boardTiles.forEach((v, k) => this.boardTiles.set(k, structuredClone(v)));
+      game.trayTiles.forEach((v, k) => this.trayTiles.set(k, structuredClone(v)));
     }
   }
 
-  #setupDemo() {
-    this.boardTiles.set('r0c1', { letter: "H" });
-    this.boardTiles.set('r1c1', { letter: "E" });
-    this.boardTiles.set('r2c1', { letter: "L" });
-    this.boardTiles.set('r3c1', { letter: "L" });
-    this.boardTiles.set('r4c1', { letter: "O" });
-    this.boardTiles.set('r4c0', { letter: "W" });
-    this.boardTiles.set('r4c2', { letter: "R" });
-    this.boardTiles.set('r4c3', { letter: "L" });
-    this.boardTiles.set('r4c4', { letter: "D" });
-    this.trayTiles.set(0, { letter: "A" });
-    this.trayTiles.set(1, { letter: "B" });
-    this.trayTiles.set(2, { letter: "C" });
+  addBoardTile(id, tile) {
+    this.boardTiles.set(id, tile);
+  }
+
+  addTrayTile(id, tile) {
+    this.trayTiles.set(id, tile);
+  }
+
+  selectTrayTile(t) {
+    this.trayTiles.forEach((v, k) => { 
+      if (k === t) {
+        v.selected = true;
+      } else {
+        v.selected = false;
+      }
+    });
+  }
+
+  dropTrayTileOnTray(t) {
+    const id = this.getSelectedTrayTileId();
+    const tile = this.trayTiles.get(id);
+    this.trayTiles.set(t, tile);
+    this.trayTiles.delete(id);
+  }
+
+  getSelectedTrayTileId() {
+    var id = null;
+    this.trayTiles.forEach((v, k) => { 
+      if (v.selected) {
+        id = k;
+      }
+    });
+    if (id === null) {
+      throw new Error("No selected tile in the tray");
+    }
+    return (id);
+  }
+
+  dropSelectedTrayTile(row, col) {
+    const trayTileId = this.getSelectedTrayTileId();
+    const trayTile = this.trayTiles.get(trayTileId);
+    this.trayTiles.delete(trayTileId);
+    const boardTileId = idFromRowCol(row, col);
+    if (this.boardTiles.has(boardTileId)) {
+      throw new Error(`Trying to drop tray tile ${trayTileId} on existing tile ${boardTileId}`);
+    }
+    this.boardTiles.set(boardTileId, { letter: trayTile.letter, candidate: true });
   }
 }
