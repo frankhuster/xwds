@@ -1,7 +1,9 @@
 export default class Game {
   constructor(isDemo = true) {
     this.boardSize = 5;
+    this.traySize = 5;
     this.boardTiles = new Map();
+    this.trayTiles = new Map();
     if (isDemo) {
       this.#setupDemo();
     }
@@ -17,5 +19,8 @@ export default class Game {
     this.boardTiles.set('r4c2', { letter: "R" });
     this.boardTiles.set('r4c3', { letter: "L" });
     this.boardTiles.set('r4c4', { letter: "D" });
+    this.trayTiles.set(0, { letter: "A" });
+    this.trayTiles.set(1, { letter: "B" });
+    this.trayTiles.set(2, { letter: "C" });
   }
 }

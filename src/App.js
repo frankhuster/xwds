@@ -1,5 +1,6 @@
 import Game from "././Game";
 import Board from "./Board";
+import Tray from "./Tray";
 
 import "./App.css";
 
@@ -9,10 +10,8 @@ export default function App() {
 
   return (
     <div className="app">
-      <Board 
-        size={game.boardSize}
-        tiles={game.boardTiles} 
-      />
+      <Board size={game.boardSize} tiles={game.boardTiles} />
+      <Tray size={game.traySize} tiles={game.trayTiles} />
     </div>
   );
 }
