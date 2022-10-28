@@ -24,24 +24,42 @@ function initialGame() {
   return game;
 }
 
+const emptyMap = new Map();
+
 export default function App() {
   const [game, dispatch] = useReducer(gameReducer, initialGame());
 
   function handleTrayTileClick(t) {
+    console.log(`handleTrayTileClick(${t})`);
     dispatch({type: "selectTrayTile", t: t})
   }
 
   function handleTraySquareClick(t) {
-    dispatch({type: "dropTrayTileOnTray", t: t})
+    console.log(`handleTraySquareClick(${t})`);
+    dispatch({type: "dropTileOnTray", t: t})
   }
 
   function handleBoardSquareClick(row, col) {
-    dispatch({type: "dropTrayTileOnBoard", row: row, col: col})
+    console.log(`handleBoardSquareClick(${row}, ${col})`);
+    dispatch({type: "dropTileOnBoard", row: row, col: col})
   }
+
+  function handleBoardTileClick(row, col) {
+    console.log(`handleBoardTileClick(${row}, ${col})`);
+    dispatch({type: "selectBoardTile", row: row, col: col})
+  }
+
+  const potentials = (game.isAnythingSelected() ? game.potentials : emptyMap);
 
   return (
     <div className="app">
-      <Board size={game.boardSize} tiles={game.boardTiles} onSquareClick={handleBoardSquareClick} />
+      <Board 
+        size={game.boardSize}
+        tiles={game.boardTiles}
+        potentials={potentials}
+        onSquareClick={handleBoardSquareClick}
+        onTileClick={handleBoardTileClick}
+     />
       <Tray 
         size={game.traySize}
         tiles={game.trayTiles}

@@ -8,13 +8,18 @@ export default function gameReducer(game, action) {
       return new Game(game);
     }
 
-    case 'dropTrayTileOnTray': {
-      game.dropTrayTileOnTray(action.t);
+    case 'dropTileOnTray': {
+      game.dropTileOnTray(action.t);
       return new Game(game);
     }
 
-    case 'dropTrayTileOnBoard': {
-      game.dropTrayTileOnBoard(action.row, action.col)
+    case 'dropTileOnBoard': {
+      game.dropTileOnBoard(action.row, action.col)
+      return new Game(game);
+    }
+
+    case 'selectBoardTile': {
+      game.selectBoardTile(action.row, action.col);
       return new Game(game);
     }
 
