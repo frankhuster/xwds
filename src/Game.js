@@ -1,4 +1,4 @@
-import { idFromRowCol, rowColFromId } from "./Helper";
+import { idFromRowCol } from "./Helper";
 
 export default class Game {
   constructor(game = null) {
@@ -136,7 +136,6 @@ export default class Game {
       const tile = this.boardTiles.get(id);
       this.trayTiles.set(t, {letter: tile.letter, selected: true});
       this.boardTiles.delete(id);
-      this.calculatePotentials();
       return;
     }
 
@@ -155,7 +154,6 @@ export default class Game {
       this.trayTiles.delete(id);
       this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true });
       this.selectBoardTile(row, col);
-      this.calculatePotentials();
       return;
     }
 
@@ -165,7 +163,6 @@ export default class Game {
       this.boardTiles.delete(id);
       this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true });
       this.selectBoardTile(row, col);
-      this.calculatePotentials();
       return;
     }
 
