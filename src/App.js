@@ -21,6 +21,7 @@ function initialGame() {
   game.addTrayTile(0, { letter: "A" });
   game.addTrayTile(1, { letter: "B" });
   game.addTrayTile(2, { letter: "C" });
+  game.calculatePotentials();
   return game;
 }
 

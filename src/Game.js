@@ -5,12 +5,14 @@ export default class Game {
     this.boardSize = 5;
     this.traySize = 5;
     this.boardTiles = new Map();
-    this.potentials = new Map();
     this.trayTiles = new Map();
     if (game) {
       game.boardTiles.forEach((v, k) => this.boardTiles.set(k, structuredClone(v)));
-      game.potentials.forEach((v, k) => this.potentials.set(k, structuredClone(v)));
       game.trayTiles.forEach((v, k) => this.trayTiles.set(k, structuredClone(v)));
+      this.potentials = new Map();
+      game.potentials.forEach((v, k) => this.potentials.set(k, v));
+    } else {
+      this.calculatePotentials();
     }
   }
 
@@ -22,31 +24,47 @@ export default class Game {
     return true;
   }
 
-  addPotential(row, col) {
+  increasePotential(row, col) {
     const id = idFromRowCol(row, col);
-    if (this.potentials.has(id)) {
-      return;
-    }
-    this.potentials.set(id, true);
+    this.potentials.set(id, this.potentials.get(id) + 1);
   }
 
-  //change potentials stragegy so it also works when removing tiles...
+  calculatePotentials() {
+    this.potentials = new Map();
+
+    for (let row = 0; row < this.boardSize; row++) {
+      for (let col = 0; col < this.boardSize; col++) {
+        this.potentials.set(idFromRowCol(row, col), 0);
+      }
+    }
+
+    for (let row = 0; row < this.boardSize; row++) {
+      for (let col = 0; col < this.boardSize; col++) {
+        var tile = this.boardTiles.get(idFromRowCol(row, col));
+        if (tile && !tile.selected) {
+          if (row > 0 && this.isEmpty(row-1, col)) {
+            this.increasePotential(row-1, col);
+          }
+          if (row < (this.boardSize-1) && this.isEmpty(row+1, col)) {
+            this.increasePotential(row+1, col);
+          }
+          if (col > 0 && this.isEmpty(row, col-1)) {
+            this.increasePotential(row, col-1);
+          }
+          if (col < (this.boardSize-1) && this.isEmpty(row, col+1)) {
+            this.increasePotential(row, col+1);
+          }
+        }
+      }
+    }
+  }
+
   addBoardTile(id, tile) {
-    this.potentials.delete(id);
     this.boardTiles.set(id, tile);
-    const [row, col] = rowColFromId(id);
-    if (row > 0 && this.isEmpty(row-1, col)) {
-      this.addPotential(row-1, col);
-    }
-    if (row < (this.boardSize-1) && this.isEmpty(row+1, col)) {
-      this.addPotential(row+1, col);
-    }
-    if (col > 0 && this.isEmpty(row, col-1)) {
-      this.addPotential(row, col-1);
-    }
-    if (col < (this.boardSize-1) && this.isEmpty(row, col+1)) {
-      this.addPotential(row, col+1);
-    }
+  }
+
+  removeBoardTile(id) {
+    this.boardTiles.delete(id);
   }
 
   addTrayTile(id, tile) {
@@ -118,6 +136,7 @@ export default class Game {
       const tile = this.boardTiles.get(id);
       this.trayTiles.set(t, {letter: tile.letter, selected: true});
       this.boardTiles.delete(id);
+      this.calculatePotentials();
       return;
     }
 
@@ -136,6 +155,7 @@ export default class Game {
       this.trayTiles.delete(id);
       this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true });
       this.selectBoardTile(row, col);
+      this.calculatePotentials();
       return;
     }
 
@@ -145,6 +165,7 @@ export default class Game {
       this.boardTiles.delete(id);
       this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true });
       this.selectBoardTile(row, col);
+      this.calculatePotentials();
       return;
     }
 
@@ -164,26 +185,26 @@ export default class Game {
   }
 
   //todo change this strategy with a neighbour count - and decrease the count when removing a tile
-  canDrop(row, col) {
-    if (row > 0) {
-      if (this.isFinalBoardTile(row-1, col)) {
-        return true;
-      }
-    }
-    if (row < (this.boardSize-1)) {
-      if (this.isFinalBoardTile(row+1, col)) {
-        return true;
-      }
-    }
-    if (col > 0) {
-      if (this.isFinalBoardTile(row, col-1)) {
-        return true;
-      }
-    }
-    if (col < (this.boardSize-1)) {
-      if (this.isFinalBoardTile(row, col+1)) {
-        return true;
-      }
-    }
-  }
+  // canDrop(row, col) {
+  //   if (row > 0) {
+  //     if (this.isFinalBoardTile(row-1, col)) {
+  //       return true;
+  //     }
+  //   }
+  //   if (row < (this.boardSize-1)) {
+  //     if (this.isFinalBoardTile(row+1, col)) {
+  //       return true;
+  //     }
+  //   }
+  //   if (col > 0) {
+  //     if (this.isFinalBoardTile(row, col-1)) {
+  //       return true;
+  //     }
+  //   }
+  //   if (col < (this.boardSize-1)) {
+  //     if (this.isFinalBoardTile(row, col+1)) {
+  //       return true;
+  //     }
+  //   }
+  // }
 }
