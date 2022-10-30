@@ -1,10 +1,13 @@
 import "./Tray.css"
 
+
 function Tile({ tile, onClick }) {
-  var classes = ["tray-tile"];
+  const classes = ["tray-tile"]
+
   if (tile.selected) {
-    classes.push("selected");
+    classes.push("selected")
   }
+
   return(
     <button className={ classes.join(" ")} onClick={onClick}>
       {tile.letter}
@@ -13,12 +16,12 @@ function Tile({ tile, onClick }) {
 }
 
 function Square({ onClick, children }) {
+
   return (
     <div className="tray-square" onClick={onClick} >
       {children}
     </div>
-    );
-  
+  )
 }
 
 function renderSquare(col, tile, onTileClick, onSquareClick) {
@@ -27,7 +30,7 @@ function renderSquare(col, tile, onTileClick, onSquareClick) {
     <Square key={col}>
       <Tile tile={tile} onClick={() => onTileClick(col)} />
     </Square>
-    );
+    )
   } 
   return (<Square key={col} onClick={() => onSquareClick(col)} />);
 }

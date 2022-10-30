@@ -181,27 +181,7 @@ export default class Game {
     return false;
   }
 
-  //todo change this strategy with a neighbour count - and decrease the count when removing a tile
-  // canDrop(row, col) {
-  //   if (row > 0) {
-  //     if (this.isFinalBoardTile(row-1, col)) {
-  //       return true;
-  //     }
-  //   }
-  //   if (row < (this.boardSize-1)) {
-  //     if (this.isFinalBoardTile(row+1, col)) {
-  //       return true;
-  //     }
-  //   }
-  //   if (col > 0) {
-  //     if (this.isFinalBoardTile(row, col-1)) {
-  //       return true;
-  //     }
-  //   }
-  //   if (col < (this.boardSize-1)) {
-  //     if (this.isFinalBoardTile(row, col+1)) {
-  //       return true;
-  //     }
-  //   }
-  // }
+  canDropOnTray(t) {
+    return (!this.trayTiles.has(t))
+  }
 }
