@@ -25,8 +25,6 @@ function initialGame() {
   return game;
 }
 
-const emptyMap = new Map();
-
 export default function App() {
   const [game, dispatch] = useReducer(gameReducer, initialGame());
 
@@ -50,19 +48,19 @@ export default function App() {
     dispatch({type: "selectBoardTile", row: row, col: col})
   }
 
-  const potentials = (game.isAnythingSelected() ? game.potentials : emptyMap);
+  const potentials = (game.isAnythingSelected() ? game.potentials : new Map());
 
   return (
     <div className="app">
       <Board 
-        size={game.boardSize}
+        size={Game.boardSize}
         tiles={game.boardTiles}
         potentials={potentials}
         onSquareClick={handleBoardSquareClick}
         onTileClick={handleBoardTileClick}
      />
       <Tray 
-        size={game.traySize}
+        size={Game.traySize}
         tiles={game.trayTiles}
         onTileClick={handleTrayTileClick} 
         onSquareClick={handleTraySquareClick} 

@@ -1,58 +1,54 @@
-import { idFromRowCol } from "./Helper";
+import { idFromRowCol } from "./Helper"
 
 export default class Game {
+  static boardSize = 5
+  static traySize = 5
   constructor(game = null) {
-    this.boardSize = 5;
-    this.traySize = 5;
-    this.boardTiles = new Map();
-    this.trayTiles = new Map();
-    if (game) {
-      game.boardTiles.forEach((v, k) => this.boardTiles.set(k, structuredClone(v)));
-      game.trayTiles.forEach((v, k) => this.trayTiles.set(k, structuredClone(v)));
-      this.potentials = new Map();
-      game.potentials.forEach((v, k) => this.potentials.set(k, v));
+  if (game) {
+      this.boardTiles = structuredClone(game.boardTiles)
+      this.trayTiles = structuredClone(game.trayTiles)
+      this.potentials = structuredClone(game.potentials)
     } else {
-      this.calculatePotentials();
+      this.boardTiles = new Map()
+      this.trayTiles = new Map()
+      this.calculatePotentials()
     }
   }
 
-  isEmpty(row, col) {
-    const id = idFromRowCol(row, col);
-    if (this.boardTiles.has(id)) {
-      return false;
-    }
-    return true;
+  isBoardEmpty(row, col) {
+    const id = idFromRowCol(row, col)
+    return !this.boardTiles.has(id)
   }
 
   increasePotential(row, col) {
-    const id = idFromRowCol(row, col);
-    this.potentials.set(id, this.potentials.get(id) + 1);
+    const id = idFromRowCol(row, col)
+    this.potentials.set(id, this.potentials.get(id) + 1)
   }
 
   calculatePotentials() {
-    this.potentials = new Map();
+    this.potentials = new Map()
 
-    for (let row = 0; row < this.boardSize; row++) {
-      for (let col = 0; col < this.boardSize; col++) {
-        this.potentials.set(idFromRowCol(row, col), 0);
+    for (let row = 0; row < Game.boardSize; row++) {
+      for (let col = 0; col < Game.boardSize; col++) {
+        this.potentials.set(idFromRowCol(row, col), 0)
       }
     }
 
-    for (let row = 0; row < this.boardSize; row++) {
-      for (let col = 0; col < this.boardSize; col++) {
-        var tile = this.boardTiles.get(idFromRowCol(row, col));
+    for (let row = 0; row < Game.boardSize; row++) {
+      for (let col = 0; col < Game.boardSize; col++) {
+        var tile = this.boardTiles.get(idFromRowCol(row, col))
         if (tile && !tile.selected) {
-          if (row > 0 && this.isEmpty(row-1, col)) {
-            this.increasePotential(row-1, col);
+          if (row > 0 && this.isBoardEmpty(row-1, col)) {
+            this.increasePotential(row-1, col)
           }
-          if (row < (this.boardSize-1) && this.isEmpty(row+1, col)) {
-            this.increasePotential(row+1, col);
+          if (row < (Game.boardSize-1) && this.isBoardEmpty(row+1, col)) {
+            this.increasePotential(row+1, col)
           }
-          if (col > 0 && this.isEmpty(row, col-1)) {
-            this.increasePotential(row, col-1);
+          if (col > 0 && this.isBoardEmpty(row, col-1)) {
+            this.increasePotential(row, col-1)
           }
-          if (col < (this.boardSize-1) && this.isEmpty(row, col+1)) {
-            this.increasePotential(row, col+1);
+          if (col < (Game.boardSize-1) && this.isBoardEmpty(row, col+1)) {
+            this.increasePotential(row, col+1)
           }
         }
       }
@@ -60,128 +56,107 @@ export default class Game {
   }
 
   addBoardTile(id, tile) {
-    this.boardTiles.set(id, tile);
+    this.boardTiles.set(id, tile)
   }
 
   removeBoardTile(id) {
-    this.boardTiles.delete(id);
+    this.boardTiles.delete(id)
   }
 
   addTrayTile(id, tile) {
-    this.trayTiles.set(id, tile);
+    this.trayTiles.set(id, tile)
+  }
+
+  removeTrayTile(id) {
+    this.trayTiles.delete(id)
   }
 
   selectTrayTile(t) {
-    this.trayTiles.forEach((v, k) => { 
-      if (k === t) {
-        v.selected = true;
-      } else {
-        v.selected = false;
-      }
-    });
-    this.boardTiles.forEach((v) => {v.selected = false;});
+    this.trayTiles.forEach((v, k) => { v.selected = (k === t) })
+    this.boardTiles.forEach((v) => { v.selected = false })
   }
 
   selectBoardTile(row, col) {
-    const id = idFromRowCol(row, col);
-    this.boardTiles.forEach((v, k) => { 
-      if (k === id) {
-        v.selected = true;
-      } else {
-        v.selected = false;
-      }
-    });
-    this.trayTiles.forEach((v) => {v.selected = false;});
+    const id = idFromRowCol(row, col)
+    this.boardTiles.forEach((v, k) => { v.selected = (k === id) })
+    this.trayTiles.forEach((v) => {v.selected = false})
   }
 
   isAnythingSelected() {
-    if (this.getSelectedTrayTileId() != null) return true;
-    if (this.getSelectedBoardTileId() != null) return true;
-    return false;
+    return this.getSelectedTrayTileId() !== null || this.getSelectedBoardTileId() !== null 
   }
 
   getSelectedTrayTileId() {
-    var id = null;
-    this.trayTiles.forEach((v, k) => { 
-      if (v.selected) {
-        id = k;
-      }
-    });
-    return (id);
+    for (const [key, val] of this.trayTiles) {
+      if (val.selected) return key
+    }
+    return null
   }
 
   getSelectedBoardTileId() {
-    var id = null;
-    this.boardTiles.forEach((v, k) => { 
-      if (v.selected) {
-        id = k;
-      }
-    });
-    return (id);
+    for (const [key, val] of this.boardTiles) {
+      if (val.selected) return key
+    }
+    return null
   }
 
   dropTileOnTray(t) {
-    if (this.trayTiles.has(t)) throw new Error(`Cannot drop tile on existing tray tile ${t}`);
+    if (this.trayTiles.has(t)) throw new Error(`Cannot drop tile on existing tray tile ${t}`)
 
-    var id = this.getSelectedTrayTileId();
+    var id = this.getSelectedTrayTileId()
     if (id != null) {
-      const tile = this.trayTiles.get(id);
-      this.trayTiles.set(t, tile);
-      this.trayTiles.delete(id);
-      return;
+      const tile = this.trayTiles.get(id)
+      this.trayTiles.set(t, tile)
+      this.trayTiles.delete(id)
+      return
     }
 
-    id = this.getSelectedBoardTileId();
+    id = this.getSelectedBoardTileId()
     if (id != null) {
-      const tile = this.boardTiles.get(id);
-      this.trayTiles.set(t, {letter: tile.letter, selected: true});
-      this.boardTiles.delete(id);
-      return;
+      const tile = this.boardTiles.get(id)
+      this.trayTiles.set(t, {letter: tile.letter, selected: true})
+      this.boardTiles.delete(id)
+      return
     }
 
-    throw new Error("Found no selected tile to drop");
+    throw new Error("Found no selected tile to drop")
   }
 
   dropTileOnBoard(row, col) {
-    const boardTileId = idFromRowCol(row, col);
+    const boardTileId = idFromRowCol(row, col)
     if (this.boardTiles.has(boardTileId)) {
-      throw new Error(`Cannot drop tile on existing board tile ${boardTileId}`);
+      throw new Error(`Cannot drop tile on existing board tile ${boardTileId}`)
     }
 
-    var id = this.getSelectedTrayTileId();
+    var id = this.getSelectedTrayTileId()
     if (id != null) {
-      const tile = this.trayTiles.get(id);
-      this.trayTiles.delete(id);
-      this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true });
-      this.selectBoardTile(row, col);
-      return;
+      const tile = this.trayTiles.get(id)
+      this.trayTiles.delete(id)
+      this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true })
+      this.selectBoardTile(row, col)
+      return
     }
 
-    id = this.getSelectedBoardTileId();
+    id = this.getSelectedBoardTileId()
     if (id != null) {
-      const tile = this.boardTiles.get(id);
-      this.boardTiles.delete(id);
-      this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true });
-      this.selectBoardTile(row, col);
-      return;
+      const tile = this.boardTiles.get(id)
+      this.boardTiles.delete(id)
+      this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true })
+      this.selectBoardTile(row, col)
+      return
     }
 
-    throw new Error("No selected tile in the tray");
-
+    throw new Error("No selected tile in the tray")
   }
 
   isFinalBoardTile(row, col) {
-    const id = idFromRowCol(row, col);
+    const id = idFromRowCol(row, col)
     if (this.boardTiles.has(id)) {
-      const tile = this.boardTiles.get(id);
+      const tile = this.boardTiles.get(id)
       if (!tile.candidate) {
-        return true;
+        return true
       }
     }
-    return false;
-  }
-
-  canDropOnTray(t) {
-    return (!this.trayTiles.has(t))
+    return false
   }
 }
