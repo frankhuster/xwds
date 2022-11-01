@@ -106,7 +106,7 @@ export default class Game {
     var id = this.getSelectedTrayTileId()
     if (id != null) {
       const tile = this.trayTiles.get(id)
-      this.trayTiles.set(t, { letter: tile.letter })
+      this.trayTiles.set(t, { letter: tile.letter, candidate: true })
       this.trayTiles.delete(id)
       return
     }
@@ -114,7 +114,7 @@ export default class Game {
     id = this.getSelectedBoardTileId()
     if (id != null) {
       const tile = this.boardTiles.get(id)
-      this.trayTiles.set(t, { letter: tile.letter })
+      this.trayTiles.set(t, { letter: tile.letter, candidate: true })
       this.boardTiles.delete(id)
       return
     }
@@ -133,7 +133,6 @@ export default class Game {
       const tile = this.trayTiles.get(id)
       this.trayTiles.delete(id)
       this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true })
-      this.selectBoardTile(row, col)
       return
     }
 
@@ -142,7 +141,6 @@ export default class Game {
       const tile = this.boardTiles.get(id)
       this.boardTiles.delete(id)
       this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true })
-      this.selectBoardTile(row, col)
       return
     }
 

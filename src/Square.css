@@ -1,0 +1,15 @@
+
+.square {
+  border: 1px solid black;
+  float: left;
+  height: 38px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 38px;
+}
+
+.over {
+  background-color: lightblue;
+}
