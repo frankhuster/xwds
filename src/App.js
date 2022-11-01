@@ -1,8 +1,10 @@
-import { useReducer } from "react";
-import Game from "././Game";
-import gameReducer from "./gameReducer";
-import Board from "./Board";
-import Tray from "./Tray";
+import { useReducer } from 'react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import Game from './Game'
+import gameReducer from './gameReducer'
+import Board from './Board'
+import Tray from './Tray'
 
 import "./App.css";
 
@@ -28,13 +30,13 @@ function initialGame() {
 export default function App() {
   const [game, dispatch] = useReducer(gameReducer, initialGame());
 
-  function handleTrayTileClick(t) {
-    console.log(`handleTrayTileClick(${t})`);
+  function handleTrayTileDrag(t) {
+    console.log(`handleTrayTileDrag(${t})`);
     dispatch({type: "selectTrayTile", t: t})
   }
 
-  function handleTraySquareClick(t) {
-    console.log(`handleTraySquareClick(${t})`);
+  function handleTileDropOnTray(t) {
+    console.log(`handleTileDropOnTray(${t})`);
     dispatch({type: "dropTileOnTray", t: t})
   }
 
@@ -52,19 +54,21 @@ export default function App() {
 
   return (
     <div className="app">
-      <Board 
-        size={Game.boardSize}
-        tiles={game.boardTiles}
-        potentials={potentials}
-        onSquareClick={handleBoardSquareClick}
-        onTileClick={handleBoardTileClick}
-     />
-      <Tray 
-        size={Game.traySize}
-        tiles={game.trayTiles}
-        onTileClick={handleTrayTileClick} 
-        onSquareClick={handleTraySquareClick} 
-      />
+      <DndProvider backend={HTML5Backend}>
+        <Board 
+          size={Game.boardSize}
+          tiles={game.boardTiles}
+          potentials={potentials}
+          onSquareClick={handleBoardSquareClick}
+          onTileClick={handleBoardTileClick}
+       />
+        <Tray 
+          size={Game.traySize}
+          tiles={game.trayTiles}
+          onTileDrag={handleTrayTileDrag}
+          onTileDrop={handleTileDropOnTray}
+        />
+      </DndProvider>
     </div>
   );
 }

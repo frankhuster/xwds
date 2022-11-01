@@ -101,12 +101,12 @@ export default class Game {
   }
 
   dropTileOnTray(t) {
-    if (this.trayTiles.has(t)) throw new Error(`Cannot drop tile on existing tray tile ${t}`)
+    if (this.trayTiles.has(t)) throw new Error(`Cannot drop tile over existing tray tile ${t}`)
 
     var id = this.getSelectedTrayTileId()
     if (id != null) {
       const tile = this.trayTiles.get(id)
-      this.trayTiles.set(t, tile)
+      this.trayTiles.set(t, { letter: tile.letter })
       this.trayTiles.delete(id)
       return
     }
@@ -114,7 +114,7 @@ export default class Game {
     id = this.getSelectedBoardTileId()
     if (id != null) {
       const tile = this.boardTiles.get(id)
-      this.trayTiles.set(t, {letter: tile.letter, selected: true})
+      this.trayTiles.set(t, { letter: tile.letter })
       this.boardTiles.delete(id)
       return
     }
@@ -125,7 +125,7 @@ export default class Game {
   dropTileOnBoard(row, col) {
     const boardTileId = idFromRowCol(row, col)
     if (this.boardTiles.has(boardTileId)) {
-      throw new Error(`Cannot drop tile on existing board tile ${boardTileId}`)
+      throw new Error(`Cannot drop tile over existing board tile ${boardTileId}`)
     }
 
     var id = this.getSelectedTrayTileId()

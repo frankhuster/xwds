@@ -28,6 +28,6 @@
   width: 34px;
 }
 
-.selected {
+.selected, .over {
   background-color: lightblue;
 }
