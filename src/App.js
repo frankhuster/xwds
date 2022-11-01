@@ -10,21 +10,23 @@ import "./App.css"
 
 
 function initialGame() {
-  var game = new Game()
-  game.addBoardTile('r0c1', { letter: "H" })
-  game.addBoardTile('r1c1', { letter: "E" })
-  game.addBoardTile('r2c1', { letter: "L" })
-  game.addBoardTile('r3c1', { letter: "L" })
-  game.addBoardTile('r4c1', { letter: "O" })
-  game.addBoardTile('r4c0', { letter: "W" })
-  game.addBoardTile('r4c2', { letter: "R" })
-  game.addBoardTile('r4c3', { letter: "L" })
-  game.addBoardTile('r4c4', { letter: "D" })
-  game.addTrayTile(0, { letter: "A", candidate: true })
-  game.addTrayTile(1, { letter: "B", candidate: true })
-  game.addTrayTile(2, { letter: "C", candidate: true })
-  game.calculatePotentials()
-  return game
+  const boardTiles = new Map()
+  boardTiles.set('r0c1', { letter: "H" })
+  boardTiles.set('r1c1', { letter: "E" })
+  boardTiles.set('r2c1', { letter: "L" })
+  boardTiles.set('r3c1', { letter: "L" })
+  boardTiles.set('r4c1', { letter: "O" })
+  boardTiles.set('r4c0', { letter: "W" })
+  boardTiles.set('r4c2', { letter: "R" })
+  boardTiles.set('r4c3', { letter: "L" })
+  boardTiles.set('r4c4', { letter: "D" })
+  
+  const trayTiles = new Map()
+  trayTiles.set(0, { letter: "A", candidate: true })
+  trayTiles.set(1, { letter: "B", candidate: true })
+  trayTiles.set(2, { letter: "C", candidate: true })
+
+  return Game.start(boardTiles, trayTiles)
 }
 
 export default function App() {
@@ -32,18 +34,22 @@ export default function App() {
 
   function handleTileDrag(obj) {
     if (obj.row) {
-      dispatch({type: "selectBoardTile", row: obj.row, col: obj.col})
+      dispatch({ type: "selectBoardTile", row: obj.row, col: obj.col })
     } else {
-      dispatch({type: "selectTrayTile", t: obj.col})
+      dispatch({ type: "selectTrayTile", t: obj.col })
     }
   }
 
   function handleTileDrop(obj) {
     if (obj.row) {
-      dispatch({type: "dropTileOnBoard", row: obj.row, col: obj.col})
+      dispatch({ type: "dropTileOnBoard", row: obj.row, col: obj.col })
     } else {
-      dispatch({type: "dropTileOnTray", t: obj.col})
+      dispatch({ type: "dropTileOnTray", t: obj.col })
     }
+  }
+
+  function handleReset() {
+    dispatch({ type: "reset" })
   }
 
   const potentials = (game.isAnythingSelected() ? game.potentials : new Map())
@@ -65,6 +71,7 @@ export default function App() {
           onDrop={handleTileDrop}
         />
       </DndProvider>
+      <button onClick={handleReset}>reset</button>
     </div>
   )
 }

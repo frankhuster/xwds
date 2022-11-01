@@ -3,16 +3,23 @@ import { idFromRowCol } from "./Helper"
 export default class Game {
   static boardSize = 5
   static traySize = 5
-  constructor(game = null) {
-  if (game) {
-      this.boardTiles = structuredClone(game.boardTiles)
-      this.trayTiles = structuredClone(game.trayTiles)
-      this.potentials = structuredClone(game.potentials)
-    } else {
-      this.boardTiles = new Map()
-      this.trayTiles = new Map()
-      this.calculatePotentials()
-    }
+
+  static clone(game) {
+    const g = new Game()
+    g.boardTiles = structuredClone(game.boardTiles)
+    g.trayTiles = structuredClone(game.trayTiles)
+    g.potentials = structuredClone(game.potentials)
+    g.originalTrayTiles = structuredClone(game.originalTrayTiles)
+    return g
+  }
+
+  static start(boardTiles, trayTiles) {
+    const g = new Game()
+    g.boardTiles = structuredClone(boardTiles)
+    g.trayTiles = structuredClone(trayTiles)
+    g.originalTrayTiles = structuredClone(trayTiles)
+    g.calculatePotentials()
+    return g
   }
 
   isBoardEmpty(row, col) {
@@ -36,7 +43,7 @@ export default class Game {
 
     for (let row = 0; row < Game.boardSize; row++) {
       for (let col = 0; col < Game.boardSize; col++) {
-        var tile = this.boardTiles.get(idFromRowCol(row, col))
+        const tile = this.boardTiles.get(idFromRowCol(row, col))
         if (tile && !tile.selected) {
           if (row > 0 && this.isBoardEmpty(row-1, col)) {
             this.increasePotential(row-1, col)
@@ -106,7 +113,7 @@ export default class Game {
     var id = this.getSelectedTrayTileId()
     if (id != null) {
       const tile = this.trayTiles.get(id)
-      this.trayTiles.set(t, { letter: tile.letter, candidate: true })
+      this.trayTiles.set(t, tile)
       this.trayTiles.delete(id)
       return
     }
@@ -114,7 +121,7 @@ export default class Game {
     id = this.getSelectedBoardTileId()
     if (id != null) {
       const tile = this.boardTiles.get(id)
-      this.trayTiles.set(t, { letter: tile.letter, candidate: true })
+      this.trayTiles.set(t, tile)
       this.boardTiles.delete(id)
       return
     }
@@ -132,7 +139,7 @@ export default class Game {
     if (id != null) {
       const tile = this.trayTiles.get(id)
       this.trayTiles.delete(id)
-      this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true })
+      this.addBoardTile(boardTileId, tile)
       return
     }
 
@@ -140,21 +147,19 @@ export default class Game {
     if (id != null) {
       const tile = this.boardTiles.get(id)
       this.boardTiles.delete(id)
-      this.addBoardTile(boardTileId, { letter: tile.letter, candidate: true })
+      this.addBoardTile(boardTileId, tile)
       return
     }
 
     throw new Error("No selected tile in the tray")
   }
 
-  isFinalBoardTile(row, col) {
-    const id = idFromRowCol(row, col)
-    if (this.boardTiles.has(id)) {
-      const tile = this.boardTiles.get(id)
-      if (!tile.candidate) {
-        return true
+  reset() {
+    this.boardTiles.forEach((val, key, map) => {
+      if (val.candidate) {
+        map.delete(key)
       }
-    }
-    return false
+    })
+    this.trayTiles = structuredClone(this.originalTrayTiles)
   }
 }

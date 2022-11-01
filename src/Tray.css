@@ -1,3 +1,10 @@
 .tray {
   margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.tray:after {
+  clear: both;
+  content: "";
+  display: table;
 }
