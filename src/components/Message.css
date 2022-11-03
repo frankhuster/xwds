@@ -1,0 +1,17 @@
+.message {
+  margin-top: 20px;
+}
+
+.message ul {
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:small;
+  margin-left: 3px;
+  margin-top: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+.error::before {
+  content: '⚠️';
+  padding-right: 3px;
+}

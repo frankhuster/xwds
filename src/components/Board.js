@@ -1,4 +1,4 @@
-import { idFromRowCol } from './Helper'
+import { rc2id } from '../helper'
 import Square from './Square'
 import Tile from './Tile'
 import './Board.css'
@@ -9,7 +9,7 @@ export default function Board({ size, tiles, potentials, onDrag, onDrop }) {
       Array(size).fill().map((x, row) => { return (
         <div key={row} className="board-row">{
           Array(size).fill().map((y, col) => {
-            const id = idFromRowCol(row, col)
+            const id = rc2id(row, col)
             const tile = tiles.get(id)
             const potential = potentials.get(id)
             const item = { row: row, col: col }
