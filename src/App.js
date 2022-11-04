@@ -21,7 +21,7 @@ export default function App() {
   const game = new Game(state)
 
   function handleTileDrag(obj) {
-    if (obj.row) {
+    if (obj.hasOwnProperty('row')) {
       dispatch({ type: 'selectBoardTile', row: obj.row, col: obj.col })
     } else {
       dispatch({ type: 'selectTrayTile', t: obj.col })
@@ -29,7 +29,7 @@ export default function App() {
   }
 
   function handleTileDrop(obj) {
-    if (obj.row) {
+    if (obj.hasOwnProperty('row')) {
       dispatch({ type: 'dropTileOnBoard', row: obj.row, col: obj.col })
     } else {
       dispatch({ type: 'dropTileOnTray', t: obj.col })
