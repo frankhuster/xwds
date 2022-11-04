@@ -37,8 +37,8 @@ export default function App() {
   }
 
   function buildButtons() {
-    const buttons = game.calcControlButtons().map(e => {return (
-      <button className={e.className} onClick={() => dispatch({ type: e.dispatch })}>
+    const buttons = game.calcControlButtons().map((e, i) => {return (
+      <button key={i} className={e.className} onClick={() => dispatch({ type: e.dispatch })}>
         {e.label}
       </button>
     )})

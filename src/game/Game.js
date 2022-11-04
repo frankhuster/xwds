@@ -1,6 +1,8 @@
 import Board from './Board'
 import rulesEnforcer from './rulesEnforcer'
 import Tray from './Tray'
+import LetterBag from './LetterBag'
+import Constants from '../Constants'
 
 export default class Game {
   constructor(state) {
@@ -12,7 +14,8 @@ export default class Game {
 
   newGame() {
     this.board = new Board(new Map())
-    this.tray = new Tray(Tray.pickTilesFromBag())
+    this.tray = new Tray(new Map())
+    this.completeTray()
   }
 
   reduce() {
@@ -98,12 +101,28 @@ export default class Game {
     this.tray.deselect()
   }
 
+  completeTray() {
+    if (this.tray.getTileCount() >= Constants.traySize) return
+
+    const bag = new LetterBag()
+    const trayLetters = this.tray.getLetters()
+    const boardLetters = this.board.getLetters()
+    bag.remove(trayLetters)
+    bag.remove(boardLetters)
+
+    for (var t = 0; t < Constants.traySize; t++) {
+      if (this.tray.isEmpty(t)) {
+        this.tray.add(t, bag.pickOne())
+      }
+    }
+  }
+
   submit() {
     this.errors = rulesEnforcer(this.getBoardTiles())
     console.log(this.errors.join(', ') || 'no errors')
     if (this.errors.length > 0) return
     this.board.acceptCandidates()
-    this.tray.complete()
+    this.completeTray()
   }
 
   clear() {

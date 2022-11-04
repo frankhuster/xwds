@@ -107,4 +107,8 @@ export default class Board {
   acceptCandidates() {
     this.tiles.forEach(tile => { delete tile.candidate })
   }
+
+  getLetters() {
+    return Array.from(this.tiles.values()).map(e => e.letter)
+  }
 }

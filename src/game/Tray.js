@@ -82,26 +82,7 @@ export default class Tray {
   }
 
   getLetters() {
-    const letters = []
-    this.tiles.forEach(val => {
-      letters.push(val.letter)
-    })
-    return letters
-  }
-
-  complete() {
-    if (this.tiles.size >= Constants.traySize) {
-      return
-    } else {
-      const letters = this.getLetters()
-      const bag = new LetterBag()
-      bag.remove(letters)
-      for (var t = 0; t < Constants.traySize; t++) {
-        if (this.isEmpty(t)) {
-          this.add(t, bag.pickOne())
-        }
-      }
-    }
+    return Array.from(this.tiles.values()).map(e => e.letter)
   }
 
   getTileCount() {
