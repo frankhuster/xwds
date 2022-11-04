@@ -10,18 +10,28 @@ export default class RulesHelper {
 
   hasNeighbour(row, col) {
     return (
-      this.hasLeftNeighbor(row, col) ||
-      this.hasTopNeighbor(row, col) ||
-      this.hasRightNeighbor(row, col) ||
-      this.hasBottomNeighbor(row, col)
+      this.hasExistingLeft(row, col) ||
+      this.hasExistingTop(row, col) ||
+      this.hasExistingRight(row, col) ||
+      this.hasExistingBottom(row, col) ||
+      this.hasCandidateLeft(row, col) ||
+      this.hasCandidateTop(row, col) ||
+      this.hasCandidateRight(row, col) ||
+      this.hasCandidateBottom(row, col)
       )
   }
 
-  hasLeftNeighbor(row, col) {
+  hasExistingNeighbour(row, col) {
+    return (
+      this.hasExistingLeft(row, col) ||
+      this.hasExistingTop(row, col) ||
+      this.hasExistingRight(row, col) ||
+      this.hasExistingBottom(row, col)
+      )
+  }
+
+  hasCandidateLeft(row, col) {
     if (col > 0) {
-      if (this.getExisting(row, col - 1)) {
-        return true
-      }
       if (this.getCandidate(row, col - 1)) {
         return true
       }
@@ -29,11 +39,8 @@ export default class RulesHelper {
     return false
   }
 
-  hasTopNeighbor(row, col) {
+  hasCandidateTop(row, col) {
     if (row > 0) {
-      if (this.getExisting(row - 1, col)) {
-        return true
-      }
       if (this.getCandidate(row - 1, col)) {
         return true
       }
@@ -41,11 +48,8 @@ export default class RulesHelper {
     return false
   }
 
-  hasRightNeighbor(row, col) {
+  hasCandidateRight(row, col) {
     if (col < Constants.boardSize - 1) {
-      if (this.getExisting(row, col + 1)) {
-        return true
-      }
       if (this.getCandidate(row, col + 1)) {
         return true
       }
@@ -53,7 +57,7 @@ export default class RulesHelper {
     return false
   }
 
-  hasBottomNeighbor(row, col) {
+  hasCandidateBottom(row, col) {
     if (row < Constants.boardSize - 1) {
       if (this.getExisting(row + 1, col)) {
         return true
@@ -65,12 +69,60 @@ export default class RulesHelper {
     return false
   }
 
+  hasExistingLeft(row, col) {
+    if (col > 0) {
+      if (this.getExisting(row, col - 1)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  hasExistingTop(row, col) {
+    if (row > 0) {
+      if (this.getExisting(row - 1, col)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  hasExistingRight(row, col) {
+    if (col < Constants.boardSize - 1) {
+      if (this.getExisting(row, col + 1)) {
+        return true
+      }
+    }
+    return false
+  }
+
+  hasExistingBottom(row, col) {
+    if (row < Constants.boardSize - 1) {
+      if (this.getExisting(row + 1, col)) {
+        return true
+      }
+    }
+    return false
+  }
+
   getExisting(row, col) {
     return getTile(row, col, this.existing)
   }
 
+  hasExisting(row, col) {
+    return !!this.getExisting(row, col)
+  }
+
   getCandidate(row, col) {
     return getTile(row, col, this.candidates)
+  }
+
+  hasCandidate(row, col) {
+    return !!this.getCandidate(row, col)
+  }
+
+  hasAny(row, col) {
+    return this.hasCandidate(row, col) || this.hasExisting(row, col)
   }
 }
 

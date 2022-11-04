@@ -1,11 +1,13 @@
 import RulesHelper from './RulesHelper'
-import ensureMinimumLength from './ensureMinimumLength'
-import ensureWord from './ensureWord'
+import ensureOneLetterWordConnected from './ensureOneLetterWordConnected'
 import ensureStartingWordOnCenter from './ensureStartingWordOnCenter'
+import ensureWordShape from './ensureWordShape'
 
 const rules = [
-  [ensureMinimumLength, ensureWord],
-  [ensureStartingWordOnCenter]
+  [ensureStartingWordOnCenter],
+  [ensureOneLetterWordConnected],
+  [ensureWordShape],
+//  [ensureMinimumLength],
 ]
 
 export default function rulesEnforcer(boardTiles) {
