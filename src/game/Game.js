@@ -39,7 +39,7 @@ export default class Game {
       return
     }
 
-    throw new Error("Found no selected tile to drop")
+    throw new Error("Found no selected tile to drop on the tray")
   }
 
   dropTileOnBoard(row, col) {
@@ -56,11 +56,11 @@ export default class Game {
     if (id != null) {
       const tile = this.board.get(id)
       this.board.drop(row, col, tile)
-      this.boardTiles.delete(id)
+      this.board.del(id)
       return
     }
 
-    throw new Error("No selected tile in the tray")
+    throw new Error("Found no selected tile to drop on the board")
   }
 
   selectTrayTile(t) {
@@ -74,8 +74,8 @@ export default class Game {
   }
 
   submit() {
-    const errors = rulesEnforcer(this.getBoardTiles())
-    console.log(errors.join(', ') || 'no errors')
+    this.errors = rulesEnforcer(this.getBoardTiles())
+    console.log(this.errors.join(', ') || 'no errors')
   }
 
   clear() {

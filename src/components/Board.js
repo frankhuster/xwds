@@ -20,7 +20,7 @@ export default function Board({ size, tiles, onDrag, onDrop }) {
                 <Tile item={item} tile={tile} onDrag={onDrag} onDrop={onDrop} />
               </Square>
             ) } else { return (
-              <Square key={col} item={item}  center={center} potential={true} />
+              <Square key={col} item={item} center={center} potential={true} />
             ) }
           })
         }</div>

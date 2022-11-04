@@ -80,7 +80,7 @@ export default class Board {
     const id = rc2id(row, col)
     if (this.tiles.has(id)) throw new Error(`Cannot drop ${tile.letter} over existing board tile ${id}`)
     this.tiles.set(id, tile)
-    this.deselect()
+    this.select(row, col)
   }
 
   getTiles() {

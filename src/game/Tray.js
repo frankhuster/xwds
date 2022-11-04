@@ -83,7 +83,7 @@ export default class Tray {
   drop(t, tile) {
     if (this.tiles.has(t)) throw new Error(`Cannot drop ${tile.letter} over existing tray tile ${t}`)
     this.tiles.set(t, tile)
-    this.deselect()
+    this.select(t)
   }
 
   getTiles() {
