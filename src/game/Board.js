@@ -89,4 +89,9 @@ export default class Board {
   getTiles() {
     return this.tiles
   }
+
+
+  getTileCount() {
+    return this.tiles.size
+  }
 }

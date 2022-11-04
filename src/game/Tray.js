@@ -1,3 +1,6 @@
+import LetterBag from './LetterBag'
+import Constants from '../Constants'
+
 export default class Tray {
   constructor(tiles) {
     this.tiles = tiles
@@ -34,7 +37,7 @@ export default class Tray {
   }
 
   isEmpty(t) {
-    return this.get(t) === null
+    return !this.get(t)
   }
 
   deselect() {
@@ -73,5 +76,43 @@ export default class Tray {
 
   getTiles() {
     return this.tiles
+  }
+
+  getLetters() {
+    const letters = []
+    this.tiles.forEach(val => {
+      letters.push(val.letter)
+    })
+    return letters
+  }
+
+  complete() {
+    if (this.tiles.size >= Constants.traySize) {
+      return
+    } else {
+      const letters = this.getLetters()
+      const bag = new LetterBag()
+      bag.remove(letters)
+      for (var t = 0; t < Constants.traySize; t++) {
+        if (this.isEmpty(t)) {
+          this.add(t, bag.pickOne())
+        }
+      }
+    }
+  }
+
+  getTileCount() {
+    return this.tiles.size
+  }
+
+  static pickTilesFromBag(letters = []) {
+    const tiles = new Map()
+    const bag = new LetterBag()
+    if (letters.length > 0) bag.remove(letters)
+    const picks = bag.pick(Constants.traySize)
+    picks.forEach((letter, idx) => {
+      tiles.set(idx, { letter: letter })
+    })
+    return tiles
   }
 }

@@ -13,3 +13,11 @@
 .over {
   background-color: lightblue;
 }
+
+.center {
+  background-color: lightpink;
+}
+
+.over.center {
+  background-color: palevioletred;
+}

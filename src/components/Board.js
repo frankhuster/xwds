@@ -4,6 +4,7 @@ import Tile from './Tile'
 import './Board.css'
 
 export default function Board({ size, tiles, potentials, onDrag, onDrop }) {
+
   return (
     <div className="board">{
       Array(size).fill().map((x, row) => { return (
@@ -13,13 +14,14 @@ export default function Board({ size, tiles, potentials, onDrag, onDrop }) {
             const tile = tiles.get(id)
             const potential = potentials.get(id)
             const item = { row: row, col: col }
+            const center = row === (size - 1) / 2 && col === (size - 1) / 2
 
             if (tile) { return (
-              <Square key={col} item={item}>
+              <Square key={col} item={item} center={center}>
                 <Tile item={item} tile={tile} onDrag={onDrag} onDrop={onDrop} />
               </Square>
             ) } else { return (
-              <Square key={col} item={item} potential={potential} />
+              <Square key={col} item={item}  center={center} potential={potential} />
             ) }
           })
         }</div>

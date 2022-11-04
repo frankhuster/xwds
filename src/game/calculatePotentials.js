@@ -12,6 +12,11 @@ function incPotential(potentials, row, col) {
 export default function calculatePotentials(tiles) {
   const potentials = new Map()
 
+  if (tiles.size === 0) {
+    incPotential(potentials, (Constants.boardSize - 1) / 2, (Constants.boardSize - 1) / 2)
+    return potentials
+  }
+
   tiles.forEach((tile, key) => {
     if (!tile.selected) {
       const [row, col] = id2rc(key)

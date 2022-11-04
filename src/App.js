@@ -9,24 +9,28 @@ import Tray from './components/Tray'
 import Message from './components/Message'
 import './App.css'
 
-const startingRound = [
-  ['r0c1', { letter: 'H' }],
-  ['r1c1', { letter: 'E' }],
-  ['r2c1', { letter: 'L' }],
-  ['r3c1', { letter: 'L' }],
-  ['r4c1', { letter: 'O' }],
-  ['r4c0', { letter: 'W' }],
-  ['r4c2', { letter: 'R' }],
-  ['r4c3', { letter: 'L' }],
-  ['r4c4', { letter: 'D' }],
-  [0, { letter: 'A', candidate: true }],
-  [1, { letter: 'B', candidate: true }],
-  [2, { letter: 'C', candidate: true }],
-]
+// const startingRound = [
+//   ['r0c1', { letter: 'H' }],
+//   ['r1c1', { letter: 'E' }],
+//   ['r2c1', { letter: 'L' }],
+//   ['r3c1', { letter: 'L' }],
+//   ['r4c1', { letter: 'O' }],
+//   ['r4c0', { letter: 'W' }],
+//   ['r4c2', { letter: 'R' }],
+//   ['r4c3', { letter: 'L' }],
+//   ['r4c4', { letter: 'D' }],
+//   [0, { letter: 'A' }],
+//   [1, { letter: 'B' }],
+//   [2, { letter: 'C' }],
+// ]
 
 export default function App() {
-  const [round, dispatch] = useReducer(reducer, startingRound)
+  const [round, dispatch] = useReducer(reducer)
   const game = new Game(round)
+
+  if (game.tray.getTileCount() === 0 && game.board.getTileCount() === 0) {
+    dispatch({ type: 'startNewGame' })
+  }
 
   function handleTileDrag(obj) {
     if (obj.row) {

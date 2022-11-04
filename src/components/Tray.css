@@ -7,3 +7,7 @@
   content: "";
   display: table;
 }
+
+.tray .square .tile {
+  color: blue;
+}

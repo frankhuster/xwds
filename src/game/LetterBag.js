@@ -9,12 +9,21 @@ export default class LetterBag {
     console.log(`The letter bag size is ${this.letters.length}`)
   }
 
-  pick() {
+  pickOne() {
     const i = Math.floor(Math.random() * this.letters.length)
     const letter = this.letters[i]
     this.letters.splice(i, 1)
     console.log(`Picked ${letter} out of the bag, the new bag size is ${this.letters.length}`)
     return letter
+  }
+
+  pick(count) {
+    const letters = []
+    for (var i = 0; i < count; i++) {
+      letters.push(this.pickOne())
+    }
+    console.log(`Picked [${letters.join(', ')}], the new bag size is ${this.letters.length}`)
+    return letters
   }
 
   remove(letters) {

@@ -1,7 +1,7 @@
 import { useDrop } from 'react-dnd'
 import './Square.css'
 
-export default function Square({ item, potential, children }) {
+export default function Square({ item, potential, center, children }) {
   const classes = ['square']
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -12,6 +12,10 @@ export default function Square({ item, potential, children }) {
 
   if (isOver) {
     classes.push("over")
+  }
+
+  if (center) {
+    classes.push("center")
   }
 
   if (children) {

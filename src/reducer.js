@@ -5,6 +5,11 @@ export default function reducer(round, action) {
 
   switch (action.type) {
 
+    case 'startNewGame': {
+      game.startNewGame()
+      return game.toRound()
+    }
+
     case 'selectTrayTile': {
       game.selectTrayTile(action.t)
       return game.toRound()

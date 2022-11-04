@@ -2,9 +2,14 @@ import Board from './Board'
 import Tray from './Tray'
 
 export default class Game {
-  constructor(round) {
+  constructor(round = []) {
     this.board = Board.fromRound(round)
     this.tray = Tray.fromRound(round)
+  }
+
+  startNewGame() {
+    this.board = new Board(new Map())
+    this.tray = new Tray(Tray.pickTilesFromBag())
   }
 
   toRound() {
@@ -40,6 +45,7 @@ export default class Game {
     var id = this.tray.getSelected()
     if (id != null) {
       const tile = this.tray.get(id)
+      tile.candidate = true
       this.board.drop(row, col, tile)
       this.tray.del(id)
       return
