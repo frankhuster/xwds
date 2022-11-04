@@ -1,6 +1,8 @@
 import Constants from '../Constants'
 
 export default function ensureStartingWordOnCenter(helper) {
+  if (helper.existing.length > 0) return []
+
   const errors = []
   const center = (Constants.boardSize - 1) / 2
 

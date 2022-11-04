@@ -2,21 +2,12 @@ import LetterBag from './LetterBag'
 import Constants from '../Constants'
 
 export default class Tray {
-  constructor(tiles) {
-    this.tiles = tiles
+  constructor(tileArray) {
+    this.tiles = new Map(tileArray)
   }
 
-  static fromRound(round) {
-    const tiles = new Map(round.filter(e => typeof e[0] === 'number'))
-    return new Tray(tiles)
-  }
-
-  getTileArray() {
-    const tiles = []
-    this.tiles.forEach((val, idx) => {
-      tiles.push([idx, val])
-    })
-    return tiles
+  toTileArray() {
+    return Array.from(this.tiles.entries())
   }
 
   add(t, letter) {

@@ -1,21 +1,12 @@
 import { id2rc, rc2id } from '../helper'
 
 export default class Board {
-  constructor(tiles) {
-    this.tiles = tiles
+  constructor(tileArray) {
+    this.tiles = new Map(tileArray)
   }
 
-  static fromRound(round) {
-    const tiles = new Map(round.filter(e => typeof e[0] === 'string'))
-    return new Board(tiles)
-  }
-
-  getTileArray() {
-    const tiles = []
-    this.tiles.forEach((val, idx) => {
-      tiles.push([idx, val])
-    })
-    return tiles
+  toTileArray() {
+    return Array.from(this.tiles.entries())
   }
 
   add(id, letter) {
@@ -103,13 +94,17 @@ export default class Board {
   }
 
   hasCandidates() {
-    var itDoes = false
+    var hasCandidates = false
     for (const [, tile] of this.tiles) {
       if (tile.candidate) {
-        itDoes = true
+        hasCandidates = true
         break
       }
     }
-    return itDoes
+    return hasCandidates
+  }
+
+  acceptCandidates() {
+    this.tiles.forEach(tile => { delete tile.candidate })
   }
 }

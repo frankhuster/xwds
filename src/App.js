@@ -3,34 +3,22 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import Constants from './Constants'
 import Game from './game/Game'
-import reducer from './reducer'
 import Board from './components/Board'
 import Tray from './components/Tray'
-import Message from './components/Message'
+import Control from './components/Control'
 import './App.css'
+import gameReducer from './gameReducer'
 
-// const startingRound = [
-//   ['r0c1', { letter: 'H' }],
-//   ['r1c1', { letter: 'E' }],
-//   ['r2c1', { letter: 'L' }],
-//   ['r3c1', { letter: 'L' }],
-//   ['r4c1', { letter: 'O' }],
-//   ['r4c0', { letter: 'W' }],
-//   ['r4c2', { letter: 'R' }],
-//   ['r4c3', { letter: 'L' }],
-//   ['r4c4', { letter: 'D' }],
-//   [0, { letter: 'A' }],
-//   [1, { letter: 'B' }],
-//   [2, { letter: 'C' }],
-// ]
+const initialState = {
+  boardTiles: [],
+  trayTiles: [],
+  errors: [],
+  messages: [],
+}
 
 export default function App() {
-  const [round, dispatch] = useReducer(reducer)
-  const game = new Game(round)
-
-  if (game.tray.getTileCount() === 0 && game.board.getTileCount() === 0) {
-    dispatch({ type: 'startNewGame' })
-  }
+  const [state, dispatch] = useReducer(gameReducer, initialState)
+  const game = new Game(state)
 
   function handleTileDrag(obj) {
     if (obj.row) {
@@ -48,25 +36,14 @@ export default function App() {
     }
   }
 
-  function handleSubmit() {
-    dispatch({ type: 'submit' })
+  function buildButtons() {
+    const buttons = game.calcControlButtons().map(e => {return (
+      <button className={e.className} onClick={() => dispatch({ type: e.dispatch })}>
+        {e.label}
+      </button>
+    )})
+    return buttons
   }
-
-  function handleClear() {
-    dispatch({ type: 'clear' })
-  }
-
-  const submitButton = (game.isInProgress() ?
-    <button className="submit" onClick={handleSubmit}>Submit</button>
-    :
-    null
-  )
-
-  const clearButton = (game.isInProgress() ?
-    <button className="clear" onClick={handleClear}>Clear</button>
-    :
-    null
-  )
 
   return (
     <div className="app">
@@ -84,9 +61,9 @@ export default function App() {
           onDrop={handleTileDrop}
         />
       </DndProvider>
-      {submitButton}
-      {clearButton}
-      <Message messages={game.getMessages()} errors={game.getErrors()} />
+      <Control>
+        {buildButtons()}
+      </Control>
     </div>
   )
 }

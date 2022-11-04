@@ -1,48 +1,43 @@
 import Game from "./game/Game"
 
-export default function reducer(round, action) {
-  const game = new Game(round)
+export default function gameReducer(state, action) {
+  const game = new Game(state)
 
   switch (action.type) {
 
-    case 'startNewGame': {
-      game.startNewGame()
-      return game.toRound()
+    case 'newGame': {
+      game.newGame()
+      return game.reduce()
     }
 
     case 'selectTrayTile': {
       game.selectTrayTile(action.t)
-      return game.toRound()
+      return game.reduce()
     }
 
     case 'dropTileOnTray': {
       game.dropTileOnTray(action.t)
-      return game.toRound()
+      return game.reduce()
     }
 
     case 'dropTileOnBoard': {
       game.dropTileOnBoard(action.row, action.col)
-      return game.toRound()
+      return game.reduce()
     }
 
     case 'selectBoardTile': {
       game.selectBoardTile(action.row, action.col)
-      return game.toRound()
+      return game.reduce()
     }
 
     case 'clear': {
       game.clear()
-      return game.toRound()
-    }
-
-    case 'new': {
-      game.newGame()
-      return game.toRound()
+      return game.reduce()
     }
 
     case 'submit': {
       game.submit()
-      return game.toRound()
+      return game.reduce()
     }
 
     default: {

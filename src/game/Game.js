@@ -3,19 +3,44 @@ import rulesEnforcer from './rulesEnforcer'
 import Tray from './Tray'
 
 export default class Game {
-  constructor(round = []) {
-    this.board = Board.fromRound(round)
-    this.tray = Tray.fromRound(round)
+  constructor(state) {
+    this.board = new Board(state.board)
+    this.tray = new Tray(state.tray)
+    this.errors = Array.from(state.errors)
+    this.messages = Array.from(state.messages)
   }
 
-  startNewGame() {
+  newGame() {
     this.board = new Board(new Map())
     this.tray = new Tray(Tray.pickTilesFromBag())
   }
 
-  toRound() {
-    const round = this.board.getTileArray().concat(this.tray.getTileArray())
-    return round
+  reduce() {
+    const state = {}
+    state.board = this.board.toTileArray()
+      state.tray = this.tray.toTileArray()
+      state.errors = this.errors ? Array.from(this.errors) : []
+      state.messages = this.messages ? Array.from(this.messages) : []
+    return state
+  }
+
+  calcControlButtons() {
+    const buttons = []
+
+    if (this.board.getTileCount() === 0 && this.tray.getTileCount() === 0) {
+      buttons.push({ className: "new-game", label: "New Game", dispatch: "newGame" })
+    }
+
+    if (this.board.hasCandidates()) {
+      buttons.push({ className: "submit", label: "Submit", dispatch: "submit" })
+      buttons.push({ className: "clear", label: "Clear", dispatch: "clear" })
+    }
+
+    return buttons
+  }
+
+  hasStatus(status) {
+    return !!this.getStatuses().find(e => e === status)
   }
 
   isAnySelected() {
@@ -76,6 +101,9 @@ export default class Game {
   submit() {
     this.errors = rulesEnforcer(this.getBoardTiles())
     console.log(this.errors.join(', ') || 'no errors')
+    if (this.errors.length > 0) return
+    this.board.acceptCandidates()
+    this.tray.complete()
   }
 
   clear() {
