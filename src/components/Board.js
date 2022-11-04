@@ -3,7 +3,7 @@ import Square from './Square'
 import Tile from './Tile'
 import './Board.css'
 
-export default function Board({ size, tiles, potentials, onDrag, onDrop }) {
+export default function Board({ size, tiles, onDrag, onDrop }) {
 
   return (
     <div className="board">{
@@ -12,7 +12,6 @@ export default function Board({ size, tiles, potentials, onDrag, onDrop }) {
           Array(size).fill().map((y, col) => {
             const id = rc2id(row, col)
             const tile = tiles.get(id)
-            const potential = potentials.get(id)
             const item = { row: row, col: col }
             const center = row === (size - 1) / 2 && col === (size - 1) / 2
 
@@ -21,7 +20,7 @@ export default function Board({ size, tiles, potentials, onDrag, onDrop }) {
                 <Tile item={item} tile={tile} onDrag={onDrag} onDrop={onDrop} />
               </Square>
             ) } else { return (
-              <Square key={col} item={item}  center={center} potential={potential} />
+              <Square key={col} item={item}  center={center} potential={true} />
             ) }
           })
         }</div>

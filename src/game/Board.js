@@ -1,5 +1,4 @@
 import { rc2id } from '../helper'
-import calculatePotentials from './calculatePotentials'
 
 export default class Board {
   constructor(tiles) {
@@ -68,15 +67,6 @@ export default class Board {
 
   isAnySelected() {
     return this.getSelected() !== null
-  }
-
-  increasePotential(potentials, row, col) {
-    const id = rc2id(row, col)
-    potentials.set(id, potentials.get(id) + 1)
-  }
-
-  calculatePotentials() {
-    return calculatePotentials(this.tiles)
   }
 
   drop(row, col, tile) {

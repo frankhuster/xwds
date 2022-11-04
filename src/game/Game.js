@@ -86,10 +86,6 @@ export default class Game {
     return this.tray.getTiles()
   }
 
-  getBoardPotentials() {
-    return this.board.calculatePotentials()
-  }
-
   getMessages() {
     return this.messages || []
   }

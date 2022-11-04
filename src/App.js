@@ -62,7 +62,6 @@ export default function App() {
         <Board
           size={Constants.boardSize}
           tiles={game.getBoardTiles()}
-          potentials={game.getBoardPotentials()}
           onDrag={handleTileDrag}
           onDrop={handleTileDrop}
        />
