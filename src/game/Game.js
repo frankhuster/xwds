@@ -1,4 +1,5 @@
 import Board from './Board'
+import rulesEnforcer from './rulesEnforcer'
 import Tray from './Tray'
 
 export default class Game {
@@ -72,10 +73,15 @@ export default class Game {
     this.tray.deselect()
   }
 
-  submitWord() {
+  submit() {
+    const errors = rulesEnforcer(this.getBoardTiles())
+    console.log(errors.join(', ') || 'no errors')
   }
 
-  reset() {
+  clear() {
+    const candidates = this.board.getCandidates()
+    this.tray.addAll(candidates)
+    this.board.removeAll(candidates)
   }
 
   getBoardTiles() {
@@ -92,5 +98,9 @@ export default class Game {
 
   getErrors() {
     return this.errors || []
+  }
+
+  isInProgress() {
+    return this.board.hasCandidates()
   }
 }

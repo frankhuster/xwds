@@ -24,6 +24,18 @@ export default class Tray {
     this.tiles.set(t, { letter: letter })
   }
 
+  addAll(tiles) {
+    const letters = []
+    tiles.forEach(tile => { letters.push(tile.letter) })
+
+    for (var t = 0; t < Constants.traySize; t++) {
+      if (this.tiles.has(t)) continue
+      this.add(t, letters.shift())
+    }
+
+    if (letters.length > 0) throw new Error(`No room to place all letters on tray`)
+  }
+
   del(t) {
     if (this.tiles.has(t)) {
       this.tiles.delete(t)

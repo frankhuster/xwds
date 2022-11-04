@@ -1,4 +1,4 @@
-import { rowColFromId } from '../helper'
+import { id2rc } from '../helper'
 import Constants from '../Constants'
 
 export default class RulesHelper {
@@ -40,7 +40,7 @@ export default class RulesHelper {
     }
     return false
   }
-  
+
   hasRightNeighbor(row, col) {
     if (col < Constants.boardSize - 1) {
       if (this.getExisting(row, col + 1)) {
@@ -52,7 +52,7 @@ export default class RulesHelper {
     }
     return false
   }
-  
+
   hasBottomNeighbor(row, col) {
     if (row < Constants.boardSize - 1) {
       if (this.getExisting(row + 1, col)) {
@@ -64,11 +64,11 @@ export default class RulesHelper {
     }
     return false
   }
-  
+
   getExisting(row, col) {
     return getTile(row, col, this.existing)
   }
-  
+
   getCandidate(row, col) {
     return getTile(row, col, this.candidates)
   }
@@ -83,7 +83,7 @@ function extractExistingAndCandidates(tiles) {
   const candidates = []
 
   tiles.forEach((val, key) => {
-    const [row, col] = rowColFromId(key)
+    const [row, col] = id2rc(key)
     if (val.candidate) {
       candidates.push({ row: row, col: col, letter: val.letter })
     } else {

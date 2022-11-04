@@ -52,9 +52,21 @@ export default function App() {
     dispatch({ type: 'submit' })
   }
 
-  function handleReset() {
-    dispatch({ type: 'reset' })
+  function handleClear() {
+    dispatch({ type: 'clear' })
   }
+
+  const submitButton = (game.isInProgress() ?
+    <button className="submit" onClick={handleSubmit}>Submit</button>
+    :
+    null
+  )
+
+  const clearButton = (game.isInProgress() ?
+    <button className="clear" onClick={handleClear}>Clear</button>
+    :
+    null
+  )
 
   return (
     <div className="app">
@@ -72,8 +84,8 @@ export default function App() {
           onDrop={handleTileDrop}
         />
       </DndProvider>
-      <button className="submit" onClick={handleSubmit}>Submit Word</button>
-      <button className="reset" onClick={handleReset}>Reset Tray</button>
+      {submitButton}
+      {clearButton}
       <Message messages={game.getMessages()} errors={game.getErrors()} />
     </div>
   )

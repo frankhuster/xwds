@@ -30,8 +30,8 @@ export default function reducer(round, action) {
       return game.toRound()
     }
 
-    case 'reset': {
-      game.reset()
+    case 'clear': {
+      game.clear()
       return game.toRound()
     }
 
@@ -41,7 +41,7 @@ export default function reducer(round, action) {
     }
 
     case 'submit': {
-      game.submitWord()
+      game.submit()
       return game.toRound()
     }
 

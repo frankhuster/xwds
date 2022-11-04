@@ -1,4 +1,4 @@
-import { rc2id } from '../helper'
+import { id2rc, rc2id } from '../helper'
 
 export default class Board {
   constructor(tiles) {
@@ -29,6 +29,13 @@ export default class Board {
     } else {
       throw new Error(`Cannot delete inexistant board tile ${id}`)
     }
+  }
+
+  removeAll(tiles) {
+    tiles.forEach(tile => {
+      const id = rc2id(tile.row, tile.col)
+      this.del(id)
+    })
   }
 
   get(id) {
@@ -80,8 +87,29 @@ export default class Board {
     return this.tiles
   }
 
-
   getTileCount() {
     return this.tiles.size
+  }
+
+  getCandidates() {
+    const candidates = []
+    this.tiles.forEach((tile, key) => {
+      if (tile.candidate) {
+        const [row, col] = id2rc(key)
+        candidates.push({ row: row, col: col, letter: tile.letter })
+      }
+    })
+    return candidates
+  }
+
+  hasCandidates() {
+    var itDoes = false
+    for (const [, tile] of this.tiles) {
+      if (tile.candidate) {
+        itDoes = true
+        break
+      }
+    }
+    return itDoes
   }
 }
