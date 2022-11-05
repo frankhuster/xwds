@@ -6,7 +6,7 @@ export default function Message({ messages, errors }) {
 
   if (errors.length > 0) {
     list = errors.map((e, i) => <li key={i} className="error">{e}</li>)
-  } else {
+  } else if (messages.length > 0) {
     list = messages.map((e, i) => <li key={i}>{e}</li>)
   }
 

@@ -27,23 +27,19 @@ export default class Game {
     return state
   }
 
-  calcControlButtons() {
-    const buttons = []
-
-    if (this.board.getTileCount() === 0 && this.tray.getTileCount() === 0) {
-      buttons.push({ className: "new-game", label: "New Game", dispatch: "newGame" })
-    }
-
-    if (this.board.hasCandidates()) {
-      buttons.push({ className: "submit", label: "Submit", dispatch: "submit" })
-      buttons.push({ className: "clear", label: "Clear", dispatch: "clear" })
-    }
-
-    return buttons
+  isInProgress() {
+    return this.board.getTileCount() > 0 || this.tray.getTileCount() > 0
   }
 
-  hasStatus(status) {
-    return !!this.getStatuses().find(e => e === status)
+  calcControlButtons() {
+    const buttons = []
+    buttons.push({ className: "new-game", label: "New Game", dispatch: "newGame",
+      disabled: this.isInProgress() })
+    buttons.push({ className: "submit", label: "Submit", dispatch: "submit",
+      disabled: !this.board.hasCandidates()})
+    buttons.push({ className: "clear", label: "Clear", dispatch: "clear",
+      disabled: !this.board.hasCandidates() })
+    return buttons
   }
 
   isAnySelected() {
@@ -145,9 +141,5 @@ export default class Game {
 
   getErrors() {
     return this.errors || []
-  }
-
-  isInProgress() {
-    return this.board.hasCandidates()
   }
 }

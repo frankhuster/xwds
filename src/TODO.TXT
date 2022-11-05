@@ -1,0 +1,2 @@
+Color tiles associated to rules errors red
+Move tray (and board?) tiles on hover

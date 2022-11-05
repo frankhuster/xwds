@@ -3,11 +3,12 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import Constants from './Constants'
 import Game from './game/Game'
+import gameReducer from './gameReducer'
 import Board from './components/Board'
 import Tray from './components/Tray'
 import Control from './components/Control'
+import Message from './components/Message'
 import './App.css'
-import gameReducer from './gameReducer'
 
 const initialState = {
   boardTiles: [],
@@ -38,7 +39,8 @@ export default function App() {
 
   function buildButtons() {
     const buttons = game.calcControlButtons().map((e, i) => {return (
-      <button key={i} className={e.className} onClick={() => dispatch({ type: e.dispatch })}>
+      <button key={i} className={e.className} disabled={e.disabled}
+        onClick={() => dispatch({ type: e.dispatch })}>
         {e.label}
       </button>
     )})
@@ -64,6 +66,7 @@ export default function App() {
       <Control>
         {buildButtons()}
       </Control>
+      <Message errors={game.getErrors()} messages={game.getMessages()} />
     </div>
   )
 }
