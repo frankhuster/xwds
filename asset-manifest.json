@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/xwds/static/css/main.6a84e4dd.css",
+    "main.js": "/xwds/static/js/main.6aa76b2a.js",
+    "index.html": "/xwds/index.html",
+    "main.6a84e4dd.css.map": "/xwds/static/css/main.6a84e4dd.css.map",
+    "main.6aa76b2a.js.map": "/xwds/static/js/main.6aa76b2a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6a84e4dd.css",
+    "static/js/main.6aa76b2a.js"
+  ]
+}
