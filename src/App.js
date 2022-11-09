@@ -49,24 +49,26 @@ export default function App() {
 
   return (
     <div className="app">
-      <DndProvider backend={HTML5Backend}>
-        <Board
-          size={Constants.boardSize}
-          tiles={game.getBoardTiles()}
-          onDrag={handleTileDrag}
-          onDrop={handleTileDrop}
-       />
-        <Tray
-          size={Constants.traySize}
-          tiles={game.getTrayTiles()}
-          onDrag={handleTileDrag}
-          onDrop={handleTileDrop}
-        />
-      </DndProvider>
-      <Control>
-        {buildButtons()}
-      </Control>
-      <Message errors={game.getErrors()} messages={game.getMessages()} />
+      <div className='content'>
+        <DndProvider backend={HTML5Backend}>
+          <Board
+            size={Constants.boardSize}
+            tiles={game.getBoardTiles()}
+            onDrag={handleTileDrag}
+            onDrop={handleTileDrop}
+         />
+          <Tray
+            size={Constants.traySize}
+            tiles={game.getTrayTiles()}
+            onDrag={handleTileDrag}
+            onDrop={handleTileDrop}
+          />
+        </DndProvider>
+        <Control>
+          {buildButtons()}
+        </Control>
+        <Message errors={game.getErrors()} messages={game.getMessages()} />
+      </div>
     </div>
   )
 }
