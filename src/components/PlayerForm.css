@@ -1,0 +1,13 @@
+.player-form button {
+  margin-top: 0px;
+  margin-left: 10px;
+}
+
+.player-form .error {
+  color: red;
+}
+
+.player-form .error::before {
+  content: '⚠️';
+  padding-right: 3px;
+}

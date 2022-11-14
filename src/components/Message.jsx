@@ -1,18 +1,21 @@
-import './Message.css'
+import './Message.css';
 
 export default function Message({ messages, errors }) {
-
-  var list
+  var list;
 
   if (errors.length > 0) {
-    list = errors.map((e, i) => <li key={i} className="error">{e}</li>)
+    list = errors.map((e, i) => (
+      <li key={i} className="error">
+        {e}
+      </li>
+    ));
   } else if (messages.length > 0) {
-    list = messages.map((e, i) => <li key={i}>{e}</li>)
+    list = messages.map((e, i) => <li key={i}>{e}</li>);
   }
 
   return (
     <div className="message">
       <ul>{list}</ul>
     </div>
-  )
+  );
 }
