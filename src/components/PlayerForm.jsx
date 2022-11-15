@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './PlayerForm.css';
 
-export default function PlayerForm() {
+export default function PlayerForm({ setPlayer }) {
   const [name, setName] = useState('');
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('typing');
@@ -31,6 +31,7 @@ export default function PlayerForm() {
         console.log(data);
         setStatus('success');
         setError(null);
+        setPlayer(name, data.id);
       })
       .catch((err) => {
         console.log('error');

@@ -4,6 +4,7 @@ import Tray from './Tray';
 import LetterBag from './LetterBag';
 import Conductor from './Conductor';
 import Constants from '../Constants';
+import Player from './Player';
 
 export default class Game {
   static initialState() {
@@ -11,6 +12,7 @@ export default class Game {
       boardTiles: [],
       trayTiles: [],
       errors: [],
+      // this belongs in the conductor, no?
       messages: ["Welcome to xwds, what's your player name?"],
       stage: Conductor.initialStage(),
     };
@@ -22,6 +24,7 @@ export default class Game {
     this.errors = Array.from(state.errors);
     this.messages = Array.from(state.messages);
     this.conductor = new Conductor(state.stage);
+    this.player = new Player(state.playerName, state.playerId);
   }
 
   newGame() {
@@ -36,7 +39,17 @@ export default class Game {
     state.tray = this.tray.toTileArray();
     state.errors = this.errors ? Array.from(this.errors) : [];
     state.messages = this.messages ? Array.from(this.messages) : [];
+    if (this.player) {
+      state.playerName = this.player.name;
+      state.playerId = this.player.id;
+    }
     return state;
+  }
+
+  setPlayer(name, id) {
+    this.player = new Player(name, id);
+    this.conductor.setPlayer();
+    this.messages = ['Waiting for an opponent...'];
   }
 
   isInProgress() {

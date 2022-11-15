@@ -30,6 +30,10 @@ export default function App() {
     }
   }
 
+  function handleSetPlayer(name, id) {
+    dispatch({ type: 'newPlayer', name: name, id: id });
+  }
+
   // calcControlButtons() {
   //   const buttons = []
   //   buttons.push({ className: "new-game", label: "New Game", dispatch: "newGame",
@@ -70,7 +74,12 @@ export default function App() {
         </DndProvider>
         <Message errors={game.getErrors()} messages={game.getMessages()} />
         <div className="control">
-          {game.conductor.isInitial() && <PlayerForm />}
+          {game.conductor.isInitial() && (
+            <PlayerForm setPlayer={handleSetPlayer} />
+          )}
+          {game.conductor.hasPlayer() && (
+            <PlayerForm setPlayer={handleSetPlayer} />
+          )}
         </div>
       </div>
     </div>
