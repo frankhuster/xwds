@@ -24,7 +24,12 @@ export default class Game {
     this.errors = Array.from(state.errors);
     this.messages = Array.from(state.messages);
     this.conductor = new Conductor(state.stage);
-    this.player = new Player(state.playerName, state.playerId);
+    if (state.playerName && state.playerId) {
+      this.player = new Player(state.playerName, state.playerId);
+    }
+    if (state.opponentName && state.opponentId) {
+      this.opponent = new Player(state.opponentName, state.opponentId);
+    }
   }
 
   newGame() {
@@ -35,6 +40,7 @@ export default class Game {
 
   reduce() {
     const state = {};
+    state.stage = this.conductor.stage;
     state.board = this.board.toTileArray();
     state.tray = this.tray.toTileArray();
     state.errors = this.errors ? Array.from(this.errors) : [];
@@ -43,6 +49,10 @@ export default class Game {
       state.playerName = this.player.name;
       state.playerId = this.player.id;
     }
+    if (this.opponent) {
+      state.opponentName = this.opponent.name;
+      state.opponentId = this.opponent.id;
+    }
     return state;
   }
 
@@ -50,6 +60,16 @@ export default class Game {
     this.player = new Player(name, id);
     this.conductor.setPlayer();
     this.messages = ['Waiting for an opponent...'];
+  }
+
+  getPlayer() {
+    return this.player;
+  }
+
+  setOpponent(name, id) {
+    this.opponent = new Player(name, id);
+    this.conductor.setOpponent();
+    this.messages = ['This is your turn to play'];
   }
 
   isInProgress() {

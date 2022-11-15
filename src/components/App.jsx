@@ -8,6 +8,7 @@ import Board from './Board';
 import Tray from './Tray';
 import Message from './Message';
 import PlayerForm from './PlayerForm';
+import WaitForOpponent from './WaitForOpponent';
 import './App.css';
 
 export default function App() {
@@ -32,6 +33,10 @@ export default function App() {
 
   function handleSetPlayer(name, id) {
     dispatch({ type: 'newPlayer', name: name, id: id });
+  }
+
+  function handleSetOpponent(name, id) {
+    dispatch({ type: 'newOpponent', name: name, id: id });
   }
 
   // calcControlButtons() {
@@ -78,7 +83,10 @@ export default function App() {
             <PlayerForm setPlayer={handleSetPlayer} />
           )}
           {game.conductor.hasPlayer() && (
-            <PlayerForm setPlayer={handleSetPlayer} />
+            <WaitForOpponent
+              player={game.getPlayer()}
+              setOpponent={handleSetOpponent}
+            />
           )}
         </div>
       </div>

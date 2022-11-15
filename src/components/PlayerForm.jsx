@@ -6,6 +6,7 @@ export default function PlayerForm({ setPlayer }) {
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('typing');
 
+  // extract that from this component?
   async function handleSubmit(e) {
     e.preventDefault();
 

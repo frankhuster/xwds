@@ -2,6 +2,7 @@
 
 export default class Conductor {
   static initialStage() {
+    console.log('stage: initial');
     return 'initial';
   }
 
@@ -15,6 +16,7 @@ export default class Conductor {
 
   setPlayer() {
     if (this.isInitial()) {
+      console.log('stage: withPlayer');
       this.stage = 'withPlayer';
     } else {
       throw new Error('setPlayer can only be called from the initial stage');
@@ -23,6 +25,21 @@ export default class Conductor {
 
   hasPlayer() {
     return this.stage === 'withPlayer';
+  }
+
+  setOpponent() {
+    if (this.hasPlayer()) {
+      this.stage = 'playing';
+      console.log('stage: playing');
+    } else {
+      throw new Error(
+        'setOpponent can only be called from the withPlayer stage'
+      );
+    }
+  }
+
+  isPlaying() {
+    return this.stage === 'playing';
   }
 
   begin() {
